@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const port = 3000;
+const port = 80;
 const bcrypt = require("bcrypt");
 const app = express();
 const session = require('express-session');
