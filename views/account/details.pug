@@ -1,8 +1,18 @@
-extend ../base
+extend ../feedbackpage
 
 block base
   .container
     .row
       .col
-        img(src='../../../images/automdlogo.png')
         h1 Account Details
+        hr
+        h4
+          .tr= "E-Mail " + users.email
+          .tr= "Name (First, Last) " + users.first_name + " " + users.last_name
+        hr
+        form.regform(method='POST' action='/details')
+          div
+            h4.headerreg.text-center Update Your Password
+            input#Password.form-control(type='text', placeholder='Enter your new password' name='updatePassword')
+          hr
+          button.btn.btn-primary(type='submit') Submit

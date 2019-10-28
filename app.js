@@ -8,6 +8,7 @@ const session = require('express-session');
 const Sequelize = require('sequelize');
 const models = require('./models');
 const router = express.Router();
+var userEmail = "";
 
 app.set("view engine", "pug");
 app.use(express.static("public"));
@@ -60,14 +61,14 @@ app.post("/register", async function(req, res) {
     })
 });
 
-app.post('/dashboard', function(req, res) {
-    console.log(req.body.AddSym)
-    let something = models.Symptom_history.build({
-        user_input: req.body.AddSym
-    })
-    something.save()
-    console.log(something)
-});
+// app.post('/dashboard', function(req, res) {
+//     console.log(req.body.AddSym)
+//     let something = models.Symptom_history.build({
+//         user_input: req.body.AddSym
+//     })
+//     something.save()
+//     console.log(something)
+// });
 
 app.get("/login", (req, res) => {
     let data = {};
@@ -77,6 +78,7 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", async function(req, res) {
+    userEmail = req.body.email;
     let emailAddress = req.body.email;
     let password = req.body.password;
     models.users.findOne({
@@ -135,11 +137,37 @@ app.get('/home', async function(req, res) {
 
 app.get('/details', async function(req, res) {
     let data = {};
-    data.users = await models.Users.findOne({
-        where: { id: req.params.id }
+    data.users = await models.users.findOne({
+        where: { email: userEmail }
     });
-    res.render('details', data);
+    console.log(data.users);
+    res.render('account/details', data);
 });
+
+// app.post("/details", async function(req, res) {
+//     //let emailAddress = email;
+//     let password = req.body.password;
+
+//     models.users.findOne({
+//         where: {
+//             email: userEmail
+//         }
+//     }).then((email) => {
+//         if (email) {
+//             res.status(500).json({ message: 'This E-Mail already exists, please try another.' });
+//         } else {
+//             bcrypt.hash(password, 10, (error, hash) => {
+//                 if (!error) {
+//                     let users = models.users.build({
+//                         email: userEmail
+//                     })
+//                     users.save();
+//                     res.redirect("/login?registeredSuccessfully=true");
+//                 }
+//             })
+//         }
+//     })
+// });
 
 app.listen(port, () => {
     console.log(`Port ${port} is listening`)
