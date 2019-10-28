@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const port = 80;
+//const port = 80;
+const port = 3000;
 const bcrypt = require("bcrypt");
 const app = express();
 const session = require('express-session');
@@ -99,7 +100,7 @@ app.post("/login", async function(req, res) {
 app.get("/logout", (req, res) => {
     let data = {};
     req.session.destroy();
-    res.redirect("/login?loggedOutSuccessfully=true");
+    res.redirect("/");
 });
 
 app.post('/Treatment', function(req, res) {
@@ -126,10 +127,18 @@ app.get('/home', async function(req, res) {
     res.render('Home', data)
 });
 
-app.get('/dashboard', async function(req, res) {
-    let data = {}
-    data.symptoms = await models.Symptoms.findAll();
-    res.render('dashboard', data)
+// app.get('/dashboard', async function(req, res) {
+//     let data = {};
+//     data.symptoms = await models.Symptoms.findAll();
+//     res.render('dashboard', data);
+// });
+
+app.get('/details', async function(req, res) {
+    let data = {};
+    data.users = await models.Users.findOne({
+        where: { id: req.params.id }
+    });
+    res.render('details', data);
 });
 
 app.listen(port, () => {
