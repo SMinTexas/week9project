@@ -1,7 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 //const port = 80;
-const port = 3000;
+//const port = 3000;
 const bcrypt = require("bcrypt");
 const app = express();
 const session = require('express-session');
@@ -169,6 +170,4 @@ app.get('/details', async function(req, res) {
 //     })
 // });
 
-app.listen(port, () => {
-    console.log(`Port ${port} is listening`)
-});
+app.listen(process.env.PORT);
